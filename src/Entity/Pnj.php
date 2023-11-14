@@ -2,14 +2,22 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PnjRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PnjRepository::class)]
-#[ApiResource]
+
+#[ApiResource(
+    order:["id" => "desc"],
+    normalizationContext:['groups' => ['test']],
+    denormalizationContext: [''=> ['test']]
+)]
+
 class Pnj
 {
     #[ORM\Id]
@@ -21,12 +29,15 @@ class Pnj
     private Collection $pnjData;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["test"])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["test"])]
     private ?string $lastName = null;
 
     #[ORM\Column]
+    #[Groups(["test"])]
     private ?int $honor = null;
 
     #[ORM\ManyToOne(inversedBy: 'pnjs')]
@@ -117,4 +128,5 @@ class Pnj
 
         return $this;
     }
+
 }
